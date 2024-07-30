@@ -2,12 +2,16 @@ package com.project.encuesta.entities;
 
 import java.security.Timestamp;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,7 +27,12 @@ public class Response {
     @ManyToOne
     private Survey survey;
 
-    
+    @OneToMany(mappedBy = "response", cascade = CascadeType.ALL)
+    private List<ResponseCatalog> responseCatalogs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "response", cascade = CascadeType.ALL)
+    private List<ResponseOption> responseOptions = new ArrayList<>();
+
     public Response() {
     }
 
@@ -34,6 +43,26 @@ public class Response {
         this.response_date = response_date;
         this.name_respondent = name_respondent;
         this.survey = survey;
+    }
+
+
+    public List<ResponseCatalog> getResponseCatalogs() {
+        return responseCatalogs;
+    }
+
+
+    public void setResponseCatalogs(List<ResponseCatalog> responseCatalogs) {
+        this.responseCatalogs = responseCatalogs;
+    }
+
+
+    public List<ResponseOption> getResponseOptions() {
+        return responseOptions;
+    }
+
+
+    public void setResponseOptions(List<ResponseOption> responseOptions) {
+        this.responseOptions = responseOptions;
     }
 
 

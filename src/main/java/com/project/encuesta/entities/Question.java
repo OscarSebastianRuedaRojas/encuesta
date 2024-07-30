@@ -1,10 +1,17 @@
 package com.project.encuesta.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,9 +32,22 @@ public class Question {
     private Survey survey;
 
     @ManyToOne
-    private Question question;
+    @Column(nullable = true)
+    @JoinColumn(name = "parent_question_id")
+    private Question parentQuestion;
 
-    
+    @OneToMany(mappedBy = "parentQuestion", cascade = CascadeType.ALL)
+    private List<Question> subQuestions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<ResponseCatalog> responseCatalogs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question",  cascade = CascadeType.ALL)
+    private List<DetailResponse> detailResponses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<ResponseOption> responseOptions = new ArrayList<>();
+
     public Question() {
     }
 
@@ -40,7 +60,49 @@ public class Question {
         this.comment_question = comment_question;
         this.chapter = chapter;
         this.survey = survey;
-        this.question = question;
+        this.parentQuestion = question;
+    }
+
+    
+    
+    public Question getParentQuestion() {
+        return parentQuestion;
+    }
+
+    public void setParentQuestion(Question parentQuestion) {
+        this.parentQuestion = parentQuestion;
+    }
+
+    public List<Question> getSubQuestions() {
+        return subQuestions;
+    }
+
+    public void setSubQuestions(List<Question> subQuestions) {
+        this.subQuestions = subQuestions;
+    }
+
+    public List<ResponseCatalog> getResponseCatalogs() {
+        return responseCatalogs;
+    }
+
+    public void setResponseCatalogs(List<ResponseCatalog> responseCatalogs) {
+        this.responseCatalogs = responseCatalogs;
+    }
+
+    public List<DetailResponse> getDetailResponses() {
+        return detailResponses;
+    }
+
+    public void setDetailResponses(List<DetailResponse> detailResponses) {
+        this.detailResponses = detailResponses;
+    }
+
+    public List<ResponseOption> getResponseOptions() {
+        return responseOptions;
+    }
+
+    public void setResponseOptions(List<ResponseOption> responseOptions) {
+        this.responseOptions = responseOptions;
     }
 
     public Long getId() {
@@ -100,18 +162,18 @@ public class Question {
     }
 
     public Question getQuestion() {
-        return question;
+        return parentQuestion;
     }
 
     public void setQuestion(Question question) {
-        this.question = question;
+        this.parentQuestion = question;
     }
 
     @Override
     public String toString() {
         return "Question [id=" + id + ", question_number=" + question_number + ", question_text=" + question_text
                 + ", response_type=" + response_type + ", comment_question=" + comment_question + ", chapter=" + chapter
-                + ", survey=" + survey + ", question=" + question + "]";
+                + ", survey=" + survey + ", question=" + parentQuestion + "]";
     }
 
     

@@ -1,10 +1,15 @@
 package com.project.encuesta.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,6 +23,9 @@ public class Chapter {
 
     @ManyToOne
     private Survey survey;
+    
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
+    private List<Question> questions = new ArrayList<>();
     
     public Chapter() {
     }
@@ -65,6 +73,14 @@ public class Chapter {
     public String toString() {
         return "Chapter [id=" + id + ", chapter_number=" + chapter_number + ", chapter_title=" + chapter_title
                 + ", survey=" + survey + "]";
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
     
 }
